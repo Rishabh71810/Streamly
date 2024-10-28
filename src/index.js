@@ -4,14 +4,15 @@ import connectDB from "./db/index.js"
 //as early apke saare environment variables load hojanye jab apki app load ho
 //improved version
 import dotenv from "dotenv"
+import {app} from './app.js'
 
 dotenv.config({
-    path:'./env',
+    path:'./.env',
 })
 
 
 connectDB().then(()=>{
-    application.listen(process.env.PORT || 8000,()=>{
+    app.listen(process.env.PORT || 8000,()=>{
         console.log(`Sever is running on:${process.env.PORT}`);
     })
 }).catch((err)=>{
