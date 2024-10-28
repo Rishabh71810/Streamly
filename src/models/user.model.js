@@ -42,7 +42,7 @@ const userSchema  = new Schema({
 // it is used as a user save the information it clicks on the save which is pre 
 userSchema.pre("save",async function(next){
  if(this.isModified("password"))return next();// this statement is used because everytime user click on save button it will save password againa and again 
-this.password = bcrypt.hash(this.password, 10)
+this.password = await bcrypt.hash(this.password, 10)
 next()
 })//do not use arrow callback in pre hook because in arrow function there is no reference to the object on  which we want to perform actions
 //.methods is used to create ypur own methods 
