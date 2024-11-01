@@ -37,7 +37,16 @@ const userSchema  = new Schema({
  password:{
     type:String,
     required:[true,'Pasword is required']
-}})
+},
+refreshToken: {
+   type: String
+}
+},
+{
+   timestamps: true
+}
+
+)
 // pre is also a hook like plugin or app.listen
 // it is used as a user save the information it clicks on the save which is pre 
 userSchema.pre("save",async function(next){
