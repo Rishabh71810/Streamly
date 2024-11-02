@@ -115,7 +115,7 @@ const loginUser =asyncHandler(async(res,res)=>{
    
   // we user variable not User 
   //bcz user-> is our variable use functions of user model and User->is mongoDb
- const isPasswordValid=  await user.isPasswordCorrect(password)
+ const isPasswordValid =  await user.isPasswordCorrect(password)
 
  const {accessToken, refreshToken} = await generateAccessAndRefreshTokens(user._id)
 
@@ -126,25 +126,47 @@ const loginUser =asyncHandler(async(res,res)=>{
   secure: true
  }
 
- return res.status(200)
- .cookie("accessToken",accessToken, options)
- .cookie("refreshToken",refershToken,options)
- .json(
-     new ApiResponse{
-      200,{
-        user: loggedInUser,accessToken,refershToken
-      },
-      "User Logged In Sucessfully"
-     }
- )
+ return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+        new ApiResponse(
+            200, 
+            {
+                user: loggedInUser, accessToken, refreshToken
+            },
+            "User logged In Successfully"
+        )
+    )
+
 })
 
 const logoutUser = asyncHandler(async(req,res)=>{
-
+   await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        refreshToken: undefined//toh delete hojaega user
+      }
+    },
+    {
+      new: true
+    }
+   )
+   const options = {
+    httpOnly : true,
+    secure: true
+   }
+     
+   return res.status(200).clearCookie("accessToken",options)
+   .clearCookie("refreshToken",options)
+   .json(new ApiResponse(200, {}, "User Logged Out"))
+   // we need the auth middleware in various tasks because we need to verify the user
 })
- 
 export {
     registerUser,
-    loginUser
+    loginUser,
+    logoutUser
 }
 

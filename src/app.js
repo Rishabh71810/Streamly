@@ -11,7 +11,8 @@ app.use(cors({
 app.use(express.json({limit : "16kb"}))//it is done so that there can be a limit on json in the database
 app.use(express.urlencoded({extended:true , limit:"16kb"})) //similarly for the urls
 app.use(express.static("public"))//in folders ko aap access krskte hain 
-app.use(cookieParser())
+app.use(cookieParser())// it helps in accessing the cookies
+
 
 //routes import 
 
